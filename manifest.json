@@ -1,0 +1,10 @@
+{
+  "name": "My Extension",
+  "version": "1.0",
+  "description": "Opens up a local webpage",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "manifest_version": 2,
+  "permissions": [ "geolocation", "unlimitedStorage", "*://*.yahooapis.com/*", "*://*.momentumdash.com/*" ]
+}

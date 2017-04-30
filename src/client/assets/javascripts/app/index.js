@@ -1,4 +1,5 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { render } from 'react-dom';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -7,8 +8,10 @@ import Redbox from 'redbox-react';
 
 import Root from './Root';
 import configureStore from './store/configureStore';
+import GithubPullRequestsView from 'features/githubPullRequests/components/GithubPullRequestsView';
 
-import 'styles/bootstrap.min.css';
+// import 'styles/bootstrap.min.css';
+require("bootstrap-webpack");
 import 'styles/styles.scss';
 
 const store = configureStore();

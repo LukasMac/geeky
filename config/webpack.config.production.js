@@ -13,7 +13,7 @@ const GLOBALS = {
 };
 
 module.exports = merge(config, {
-  debug: false,
+  // debug: false,
   devtool: 'cheap-module-source-map',
   entry: {
     application: 'production',
@@ -61,11 +61,11 @@ module.exports = merge(config, {
           path.resolve(__dirname, '../src/client/scripts')
         ],
         loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style',
+          fallbackLoader: 'style-loader',
           loader: [
-            { loader: 'css', query: { sourceMap: true } },
-            'postcss',
-            { loader: 'sass', query: { outputStyle: 'compressed' } }
+            { loader: 'css-loader', query: { sourceMap: true } },
+            // 'postcss',
+            { loader: 'sass-loader', query: { outputStyle: 'compressed' } }
           ]
         })
       },
@@ -93,8 +93,9 @@ module.exports = merge(config, {
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style',
-          loader: ['css', 'postcss']
+          fallbackLoader: 'style-loader',
+          // loader: ['css-loader', 'postcss-loader']
+          loader: ['css-loader']
         })
       }
     ]

@@ -7,6 +7,7 @@ import { Router } from 'react-router';
 import routes from './routes';
 import { SENTRY_URL } from './config';
 
+import App from './App'
 // If you use React Router, make this component
 // render <Router> with your routes. Currently,
 // only synchronous routes are hot reloaded, and
@@ -19,7 +20,8 @@ window.Raven && Raven.config(SENTRY_URL).install();
 const Root = ({ store, history }) => {
   let ComponentEl = (
     <Provider store={store}>
-      <Router history={history} routes={routes} />
+      <App />
+      {/*<Router history={history} routes={routes} />*/}
     </Provider>
   );
 
@@ -29,7 +31,8 @@ const Root = ({ store, history }) => {
     ComponentEl = (
       <Provider store={store}>
         <div>
-          <Router history={history} routes={routes} />
+          {/*<Router history={history} routes={routes} />*/}
+          <App />
           {!window.devToolsExtension ? <DevTools /> : null}
         </div>
       </Provider>

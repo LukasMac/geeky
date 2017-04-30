@@ -15,9 +15,9 @@ export default class FriendsLayout extends Component {
 
     return (
       <div className="friendListApp">
-        <h1>Best Rappers List</h1>
-        <AddFriendInput addFriend={actions.addFriend} />
-        <FriendList friends={friendsById} actions={actions} />
+        <h1>This is new TAB</h1>
+        {/* <AddFriendInput addFriend={actions.addFriend} /> */}
+        {/* <FriendList friends={friendsById} actions={actions} /> */}
       </div>
     );
   }

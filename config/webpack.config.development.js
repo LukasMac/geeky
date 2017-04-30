@@ -12,7 +12,6 @@ const GLOBALS = {
 };
 
 module.exports = merge(config, {
-  debug: true,
   cache: true,
   devtool: 'cheap-module-eval-source-map',
   entry: {
@@ -25,7 +24,10 @@ module.exports = merge(config, {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin(GLOBALS)
+    new webpack.DefinePlugin(GLOBALS),
+    // new webpack.LoaderOptionsPlugin({
+    //   debug: false
+    // })
   ],
   module: {
     loaders: [
@@ -38,10 +40,9 @@ module.exports = merge(config, {
           path.resolve(__dirname, '../src/client/scripts')
         ],
         loaders: [
-          'style',
-          'css',
-          'postcss',
-          { loader: 'sass', query: { outputStyle: 'expanded' } }
+          'style-loader',
+          'css-loader',
+          { loader: 'sass-loader', query: { outputStyle: 'expanded' } }
         ]
       },
       // Sass + CSS Modules
@@ -65,7 +66,7 @@ module.exports = merge(config, {
       // CSS
       {
         test: /\.css$/,
-        loader: 'style!css!postcss'
+        loader: 'style-loader!css'
       }
     ]
   }

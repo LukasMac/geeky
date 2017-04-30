@@ -39,13 +39,13 @@ module.exports = {
       {
         test: /\.jsx?$/,
         include: path.resolve(__dirname, '../src/client/assets/javascripts'),
-        loader: 'babel'
+        loader: 'babel-loader'
       },
       // Images
       // Inline base64 URLs for <=8k images, direct URLs for the rest
       {
         test: /\.(png|jpg|jpeg|gif|svg)$/,
-        loader: 'url',
+        loader: 'url-loader',
         query: {
           limit: 8192,
           name: 'images/[name].[ext]?[hash]'
@@ -54,19 +54,25 @@ module.exports = {
       // Fonts
       {
         test: /\.(woff|woff2|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url',
+        loader: 'url-loader',
         query: {
           limit: 8192,
           name: 'fonts/[name].[ext]?[hash]'
         }
-      }
+      },
+      // the url-loader uses DataUrls. 
+      // the file-loader emits files. 
+      {test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff'},
+      {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/octet-stream'},
+      {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader'},
+      {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml'}
     ]
   },
-  postcss: function () {
-    return [
-      autoprefixer({
-        browsers: ['last 2 versions']
-      })
-    ];
-  }
+  // postcss: function () {
+  //   return [
+  //     autoprefixer({
+  //       browsers: ['last 2 versions']
+  //     })
+  //   ];
+  // }
 };

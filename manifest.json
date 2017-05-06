@@ -1,10 +1,15 @@
 {
-  "name": "My Extension",
+  "name": "Geeky",
+  "short_name": "Geeky",
   "version": "1.0",
-  "description": "Opens up a local webpage",
+  "description": "New tab dashboard with background image and ability to list Github Pull Requests",
+  "browser_action": {
+      "default_title": "Geeky"
+   },
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
   "manifest_version": 2,
-  "permissions": [ "geolocation", "unlimitedStorage", "*://*.yahooapis.com/*", "*://*.momentumdash.com/*" ]
+  "offline_enabled": true,
+  "permissions": [ "unlimitedStorage", "*://*.momentumdash.com/*" ]
 }

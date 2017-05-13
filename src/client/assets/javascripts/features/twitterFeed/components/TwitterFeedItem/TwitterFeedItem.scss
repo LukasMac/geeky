@@ -1,0 +1,26 @@
+.tweet {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: rgb(20, 23, 26);
+  background: #f5f8fa;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+
+  .header {
+    font-size: 14px;
+    margin-bottom: 5px;
+
+    .profile-picture {
+      float: right;
+      border-radius: 5px;
+    }
+
+    .screenName {
+      color: rgb(101, 119, 134);
+    }
+  }
+
+  .open-tweet-link {
+    font-size: 12px;
+  }
+}

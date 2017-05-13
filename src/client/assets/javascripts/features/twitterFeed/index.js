@@ -4,4 +4,4 @@ export {
   requestActions,
   actionCreators,
   NAME,
-} from './background';
+} from './twitterFeed';

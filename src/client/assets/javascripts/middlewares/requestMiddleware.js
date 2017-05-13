@@ -1,14 +1,27 @@
 import api from '../lib/api/api';
 import githubApi from '../lib/api/githubApi';
 import momentumApi from '../lib/api/momentumApi';
+import twitterApi from '../lib/api/twitterApi';
 import * as GithubEndpoints from '../lib/api/endpoints/github';
+import * as TwitterEndpoints from '../lib/api/endpoints/twitter';
 import * as BackgroundEndpoints from '../lib/api/endpoints/background';
-import { requestActions as githubPullRequestsRequestActions, actionCreators as githubPullRequestActionCreators } from '../features/githubPullRequests'
-import { requestActions as backgroundRequestActions, actionCreators as backgroundActionCreators } from '../features/background'
+import {
+  requestActions as githubPullRequestsRequestActions,
+  actionCreators as githubPullRequestActionCreators
+} from '../features/githubPullRequests';
+import {
+  requestActions as backgroundRequestActions,
+  actionCreators as backgroundActionCreators
+} from '../features/background';
+import {
+  requestActions as twitterFeedRequestActions,
+  actionCreators as twitterFeedActionCreators
+} from '../features/twitterFeed';
 
 const actions = {
   ...githubPullRequestsRequestActions,
   ...backgroundRequestActions,
+  ...twitterFeedRequestActions,
 };
 
 const apiRequestGitHubPullRequests = (store) => {
@@ -60,13 +73,38 @@ const apiRequestBackgroundsMetadata = (store, _id, filename) => {
 const apiRequestBackgroundDownload = (store, _id, filename) => {
   BackgroundEndpoints.getBackground(api.getInstance(), filename)
     .then(response => {
-      debugger
       store.dispatch(backgroundActionCreators.requestBackgroundDownloadSuccess(_id, response.body));
     }).catch(err => {
       store.dispatch(backgroundActionCreators.requestBackgroundDownloadError(err));
     });
 };
 
+const apiRequestTwitterSearch = (store) => {
+  const TWITTER_BEARER_TOKEN_KEY = 'twitterBearerToken';
+  const settings = store.getState().settings.persisted;
+  const searchTweets = (accessToken) => {
+    TwitterEndpoints.twitterSearch(twitterApi.getInstance(accessToken), settings.twitterSearchKeywords)
+    .then(response => {
+      store.dispatch(twitterFeedActionCreators.requestTwitterSearchSuccess(response.body.statuses));
+    }).catch(err => {
+      store.dispatch(twitterFeedActionCreators.requestTwitterSearchError(err));
+    });
+  }
+
+  const twitterBearerToken = localStorage.getItem(TWITTER_BEARER_TOKEN_KEY)
+  if (twitterBearerToken) {
+    searchTweets(twitterBearerToken);
+  } else {
+    twitterApi.getOAuthToken(
+      settings.twitterConsumerKey, settings.twitterConsumerSecret
+    ).then(authResponse => {
+      localStorage.setItem(TWITTER_BEARER_TOKEN_KEY, authResponse.body.access_token);
+      searchTweets(authResponse.body.access_token);
+    }).catch(err => {
+      store.dispatch(twitterFeedActionCreators.requestTwitterSearchError(err));
+    });
+  }
+};
 
 export default (store) => (next) => (action) => {
   const result = next(action);
@@ -80,6 +118,9 @@ export default (store) => (next) => (action) => {
     break;
   case actions.REQUEST_BACKGROUND_DOWNLOAD:
     apiRequestBackgroundDownload(store, action._id, action.filename);
+    break;
+  case actions.REQUEST_TWITTER_SEARCH:
+    apiRequestTwitterSearch(store);
     break;
   }
 

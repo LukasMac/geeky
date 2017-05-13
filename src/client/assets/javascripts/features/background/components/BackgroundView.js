@@ -10,7 +10,7 @@ import './BackgroundView.scss';
 @connect(selector, (dispatch) => ({
   actions: bindActionCreators(backgroundActions, dispatch)
 }))
-export default class Background extends Component {
+export default class BackgroundView extends Component {
   constructor() {
     super();
     this.getBackground = this.getBackground.bind(this);

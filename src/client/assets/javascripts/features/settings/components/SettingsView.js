@@ -7,6 +7,8 @@ import { actionCreators as settingsActions, selector } from '../';
 import SettingsModal from './SettingsModal';
 import SettingsAlert from './SettingsAlert';
 
+import './SettingsView.scss';
+
 @connect(selector, (dispatch) => ({
   actions: bindActionCreators(settingsActions, dispatch)
 }))
@@ -17,7 +19,7 @@ export default class Settings extends Component {
 
   render() {
     return (
-      <div>
+      <div className="settings">
         <SettingsAlert settings={this.props.settings.persisted} />
         <Button
           onClick={this.props.actions.click}

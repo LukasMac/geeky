@@ -68,6 +68,49 @@ export default class SettingsModal extends Component {
                 />
               </Col>
             </FormGroup>
+            <hr />
+            <FormGroup controlId="formHorizontalTwitterSearchKeywords">
+              <Col componentClass={ControlLabel} sm={4}>
+                Twitter search keywords
+              </Col>
+              <Col sm={8}>
+                <FormControl
+                  type="text"
+                  placeholder="Type search keywords"
+                  name="twitterSearchKeywords"
+                  defaultValue={this.state.twitterSearchKeywords}
+                  onChange={this.handleChange}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup controlId="formHorizontalTwitterConsumerKey">
+              <Col componentClass={ControlLabel} sm={4}>
+                Twitter Application Consumer Key
+              </Col>
+              <Col sm={8}>
+                <FormControl
+                  type="password"
+                  placeholder="Enter twitter application consumer key"
+                  name="twitterConsumerKey"
+                  defaultValue={this.state.twitterConsumerKey}
+                  onChange={this.handleChange}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup controlId="formHorizontalTwitterConsumerSecret">
+              <Col componentClass={ControlLabel} sm={4}>
+                Twitter Application Consumer Secret
+              </Col>
+              <Col sm={8}>
+                <FormControl
+                  type="password"
+                  placeholder="Enter twitter application consumer secret"
+                  name="twitterConsumerSecret"
+                  defaultValue={this.state.twitterConsumerSecret}
+                  onChange={this.handleChange}
+                />
+              </Col>
+            </FormGroup>
           </Form>
         </Modal.Body>
         <Modal.Footer>

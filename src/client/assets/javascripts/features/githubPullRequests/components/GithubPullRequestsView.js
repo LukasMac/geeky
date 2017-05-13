@@ -43,7 +43,7 @@ export default class GithubPullRequestsView extends Component {
             <ListGroup fill>
               {this.renderPullRequests()}
             </ListGroup>
-          }         
+          }
         </Panel>
       </div>
     );

@@ -1,7 +1,7 @@
 {
   "name": "Geeky",
   "short_name": "Geeky",
-  "version": "1.0",
+  "version": "1.2",
   "description": "New tab dashboard with background image and ability to list Github Pull Requests",
   "browser_action": {
       "default_title": "Geeky"
@@ -11,5 +11,5 @@
   },
   "manifest_version": 2,
   "offline_enabled": true,
-  "permissions": [ "unlimitedStorage", "*://*.momentumdash.com/*", "*://*.twitter.com/*" ]
+  "permissions": [ "unlimitedStorage", "*://*.momentumdash.com/*", "*://*.twitter.com/*", "*://hacker-news.firebaseio.com/*" ]
 }

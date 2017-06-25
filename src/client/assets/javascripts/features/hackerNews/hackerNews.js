@@ -13,12 +13,12 @@ export const requestActions = {
 }
 
 let initialState = { topStories: [] };
-// const cachedState = JSON.parse(localStorage.getItem(NAME)) || {};
-// const ONE_MINUTE = 60;
-// const lastFetchedAgo = Math.floor(Date.now() / 1000) - (cachedState.createdAt || 0);
-// if (lastFetchedAgo < ONE_MINUTE) {
-//   initialState = cachedState;
-// }
+const cachedState = JSON.parse(localStorage.getItem(NAME)) || {};
+const TEN_MINUTES = 60 * 10;
+const lastFetchedAgo = Math.floor(Date.now() / 1000) - (cachedState.createdAt || 0);
+if (lastFetchedAgo < TEN_MINUTES) {
+  initialState = cachedState;
+}
 
 // Reducer
 export default function reducer(state = initialState, action = {}) {
@@ -35,13 +35,21 @@ export default function reducer(state = initialState, action = {}) {
         topStories: [],
         fetching: false,
       }
+    case requestActions.REQUEST_HACKER_NEWS_TOP_STORIES_FAILURE:
+      return {
+        error: true,
+        data: action.data,
+      }
     case requestActions.REQUEST_HACKER_NEWS_STORY_SUCCESS:
       const topStories = [...state.topStories, action.data];
 
-      return {
+      const newState = {
         ...state,
         topStories,
       }
+
+      localStorage.setItem(NAME, JSON.stringify(newState));
+      return newState;
     default:
       return state;
   }
@@ -54,8 +62,9 @@ const requestHackerNewsTopStories = () => ({
 const requestHackerNewsTopStoriesSuccess = () => ({
   type: requestActions.REQUEST_HACKER_NEWS_TOP_STORIES_SUCCESS,
 });
-const requestHackerNewsTopStoriesFailure = () => ({
+const requestHackerNewsTopStoriesFailure = (data) => ({
   type: requestActions.REQUEST_HACKER_NEWS_TOP_STORIES_FAILURE,
+  data
 });
 const requestHackerNewsStory = (id) => ({
   type: requestActions.REQUEST_HACKER_NEWS_STORY,

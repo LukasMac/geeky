@@ -1,0 +1,16 @@
+.hacker-news-story {
+  background-color: rgb(246, 246, 239);
+  font-family: Verdana, Geneva, sans-serif;
+  padding: 5px;
+
+  .story-header a {
+    color: #000;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .subtext {
+    color: rgb(130, 130, 130);
+    font-size: 10px;
+  }
+}

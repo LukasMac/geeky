@@ -4,30 +4,38 @@ import { bindActionCreators } from 'redux';
 
 import { actionCreators as hackerNewsActions, selector } from '../';
 
+import HackerNewsStory from './HackerNewsStory';
+import HackerNewsTopStoriesError from './HackerNewsTopStoriesError';
+import HackerNewsTopStoriesFetching from './HackerNewsTopStoriesFetching';
+
+import './HackerNewsTopStories.scss';
+
 @connect(selector, (dispatch) => ({
   actions: bindActionCreators(hackerNewsActions, dispatch)
 }))
 export default class HackerNewsTopStoriesView extends Component {
   componentDidMount() {
-    // if (!this.props.twitterFeed.createdAt) {
+    if (!this.props.hackerNews.createdAt) {
       this.props.actions.requestHackerNewsTopStories();
-    // }
+    }
   }
 
   render() {
-    // if (this.props.twitterFeed.error) {
-    //   return <TwitterFeedError data={this.props.twitterFeed.data} />;
-    // } else if (this.props.twitterFeed.fetching) {
-    //   return <TwitterFeedFetching />;
-    // }
+    if (this.props.hackerNews.error) {
+      return <HackerNewsTopStoriesError data={this.props.hackerNews.data} />;
+    } else if (this.props.hackerNews.fetching) {
+      return <HackerNewsTopStoriesFetching />;
+    }
 
-    // return <TwitterFeed twitterFeed={this.props.twitterFeed} />;
     if (this.props.hackerNews.topStories) {
       return (
-        <div>
-          {this.props.hackerNews.topStories.map(function (story) {
-          return (<div>{story.title}</div>);
-          })}
+        <div className="hacker-news-top-stories">
+          <div className="header">
+            Hacker News <small>(refreshed every 10 minutes)</small>
+          </div>
+          {this.props.hackerNews.topStories.map((story) =>
+          <HackerNewsStory key={story.id} story={story} />
+          )}
         </div>
         );
     } else {

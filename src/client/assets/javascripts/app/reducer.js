@@ -6,6 +6,7 @@ import githubPullRequests, { NAME as githubPullRequestsName } from 'features/git
 import background, { NAME as backgroundName } from 'features/background';
 import settings, { NAME as settingsName } from 'features/settings';
 import twitterFeed, { NAME as twitterFeedName } from 'features/twitterFeed';
+import hackerNews, { NAME as hackerNewsName } from 'features/hackerNews';
 
 
 export default combineReducers({
@@ -14,4 +15,5 @@ export default combineReducers({
   [backgroundName]: background,
   [settingsName]: settings,
   [twitterFeedName]: twitterFeed,
+  [hackerNewsName]: hackerNews,
 });

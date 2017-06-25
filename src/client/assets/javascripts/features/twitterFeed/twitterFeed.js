@@ -10,7 +10,7 @@ export const requestActions = {
 }
 
 let initialState = { statuses: [] };
-const cachedState = JSON.parse(localStorage.getItem(NAME));
+const cachedState = JSON.parse(localStorage.getItem(NAME)) || {};
 const ONE_MINUTE = 60;
 const lastFetchedAgo = Math.floor(Date.now() / 1000) - (cachedState.createdAt || 0);
 if (lastFetchedAgo < ONE_MINUTE) {
@@ -22,20 +22,25 @@ export default function reducer(state = initialState, action = {}) {
   switch(action.type) {
     case requestActions.REQUEST_TWITTER_SEARCH:
       return {
+        ...state,
         fetching: true,
       }
     case requestActions.REQUEST_TWITTER_SEARCH_SUCCESS:
       const newState = {
+        ...state,
         createdAt: Math.floor(Date.now() / 1000),
         statuses: action.data,
+        fetching: false,
       }
 
       localStorage.setItem(NAME, JSON.stringify(newState));
       return newState;
     case requestActions.REQUEST_TWITTER_SEARCH_ERROR:
       return {
+        ...state,
         error: true,
         data: action.data,
+        fetching: false,
       }
     default:
       return state;

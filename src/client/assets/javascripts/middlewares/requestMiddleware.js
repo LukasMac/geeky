@@ -2,9 +2,11 @@ import api from '../lib/api/api';
 import githubApi from '../lib/api/githubApi';
 import momentumApi from '../lib/api/momentumApi';
 import twitterApi from '../lib/api/twitterApi';
+import hackerNewsApi from '../lib/api/hackerNewsApi';
 import * as GithubEndpoints from '../lib/api/endpoints/github';
 import * as TwitterEndpoints from '../lib/api/endpoints/twitter';
 import * as BackgroundEndpoints from '../lib/api/endpoints/background';
+import * as HackerNewsEndpoints from '../lib/api/endpoints/hackerNews';
 import {
   requestActions as githubPullRequestsRequestActions,
   actionCreators as githubPullRequestActionCreators
@@ -17,11 +19,16 @@ import {
   requestActions as twitterFeedRequestActions,
   actionCreators as twitterFeedActionCreators
 } from '../features/twitterFeed';
+import {
+  requestActions as hackerNewsRequestActions,
+  actionCreators as hackerNewsActionCreators,
+} from '../features/hackerNews';
 
 const actions = {
   ...githubPullRequestsRequestActions,
   ...backgroundRequestActions,
   ...twitterFeedRequestActions,
+  ...hackerNewsRequestActions,
 };
 
 const apiRequestGitHubPullRequests = (store) => {
@@ -34,32 +41,6 @@ const apiRequestGitHubPullRequests = (store) => {
     });
 };
 
-   //       "_id":"150691d4-9160-4ffa-85bb-e33cc5972b58",
-   //       "title":"Quepos, Costa Rica",
-   //       "source":"kansasphoto",
-   //       "attribution":"Photo by kansasphoto",
-   //       "sourceUrl":"https://www.flickr.com/photos/34022876@N06/3486842841/",
-   //       "filename":"https://farm4.staticflickr.com/3315/3486842841_d78a545ff2_o.jpg",
-   //       "flt":false,
-   //       "forDate":"2017-04-13",
-   //       "detail_url":null,
-   //       "is_favorite":false
-   //    },
-   //    {  
-   //       "_id":"c3c40734-4bba-4242-8e8e-92162143f7fa",
-   //       "title":"Three Brothers, Yosemite",
-   //       "source":"Orrin Hancock",
-   //       "attribution":"Photo by Orrin Hancock",
-   //       "sourceUrl":"https://www.instagram.com/p/BA0dqO-zFQP/?taken-by=orrinhancock",
-   //       "filename":"https://farm4.staticflickr.com/3946/33806116732_d175cc2577_k.jpg",
-   //       "flt":false,
-   //       "forDate":"2017-04-14",
-   //       "detail_url":null,
-   //       "is_favorite":false
-   //    }
-   // ]
-
-  // store.dispatch(backgroundActionCreators.requestBackgroundsMetadataSuccess(response));
 const apiRequestBackgroundsMetadata = (store, _id, filename) => {
   BackgroundEndpoints.getBackgroundsMetadata(momentumApi.getInstance(), 123)
     .then(response => {
@@ -106,22 +87,45 @@ const apiRequestTwitterSearch = (store) => {
   }
 };
 
+const apiRequestHackerNewsTopStories = (store) => {
+  HackerNewsEndpoints.hackerNewsTopStories(hackerNewsApi.getInstance())
+    .then(response => {
+      store.dispatch(hackerNewsActionCreators.requestHackerNewsTopStoriesSuccess());
+      apiRequestHackerNewsStory(store, response.body[0]);
+      apiRequestHackerNewsStory(store, response.body[1]);
+      apiRequestHackerNewsStory(store, response.body[2]);
+    }).catch(err => {
+      store.dispatch(hackerNewsActionCreators.requestHackerNewsTopStoriesFailure(err));
+    });
+};
+
+const apiRequestHackerNewsStory = (store, id) => {
+  HackerNewsEndpoints.hackerNewsStory(hackerNewsApi.getInstance(), id)
+    .then(response => {
+      store.dispatch(hackerNewsActionCreators.requestHackerNewsStorySuccess(response.body));
+    }).catch(err => {
+      store.dispatch(hackerNewsActionCreators.requestHackerNewsStoryFailure(err));
+    });
+}
+
 export default (store) => (next) => (action) => {
   const result = next(action);
 
   switch (action.type) {
-  case actions.REQUEST_GITHUB_PULL_REQUESTS:
-    apiRequestGitHubPullRequests(store);
-    break;
-  case actions.REQUEST_BACKGROUND_METADATA:
-    apiRequestBackgroundsMetadata(store);
-    break;
-  case actions.REQUEST_BACKGROUND_DOWNLOAD:
-    apiRequestBackgroundDownload(store, action._id, action.filename);
-    break;
-  case actions.REQUEST_TWITTER_SEARCH:
-    apiRequestTwitterSearch(store);
-    break;
+    case actions.REQUEST_GITHUB_PULL_REQUESTS:
+      apiRequestGitHubPullRequests(store);
+      break;
+    case actions.REQUEST_BACKGROUND_METADATA:
+      apiRequestBackgroundsMetadata(store);
+      break;
+    case actions.REQUEST_BACKGROUND_DOWNLOAD:
+      apiRequestBackgroundDownload(store, action._id, action.filename);
+      break;
+    case actions.REQUEST_TWITTER_SEARCH:
+      apiRequestTwitterSearch(store);
+      break;
+    case actions.REQUEST_HACKER_NEWS_TOP_STORIES:
+      apiRequestHackerNewsTopStories(store);
+      break;
   }
-
 }
